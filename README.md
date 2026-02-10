@@ -12,9 +12,9 @@ This repository hosts production-ready implementations of the [DataSource interf
 
 | Data Source | Description | Status | Documentation |
 |------------|-------------|--------|---------------|
-| **Stack Exchange** | Search across 170+ Stack Exchange sites (Stack Overflow, Server Fault, etc.) | ✅ Stable | [README](stackexchange/README.md) |
-| **Wikipedia** | Search Wikipedia articles and extracts | ✅ Stable | [README](wikipedia/README.md) |
-| **DuckDuckGo** | Instant answers and web search results | ✅ Stable | [README](duckduckgo/README.md) |
+| **Stack Exchange** | Search across 170+ Stack Exchange sites (Stack Overflow, Server Fault, etc.) | Stable | [README](stackexchange/README.md) |
+| **Wikipedia** | Search Wikipedia articles and extracts | Stable | [README](wikipedia/README.md) |
+| **DuckDuckGo** | Instant answers and web search results | Stable | [README](duckduckgo/README.md) |
 
 ### Community Contributions
 
@@ -104,15 +104,15 @@ We welcome high-quality data source implementations!
 
 Your implementation must:
 
-- ✅ Fully implement the `DataSource` interface
-- ✅ Handle errors gracefully
-- ✅ Include timeouts (≤ 8 seconds for normal operations)
-- ✅ Validate inputs
-- ✅ Have passing tests (use `go test ./...`)
-- ✅ Include documentation
-- ✅ Respect API rate limits
-- ✅ Use meaningful error messages
-- ✅ Follow Go best practices
+- Fully implement the `DataSource` interface
+- Handle errors gracefully
+- Include timeouts (≤ 8 seconds for normal operations)
+- Validate inputs
+- Have passing tests (use `go test ./...`)
+- Include documentation
+- Respect API rate limits
+- Use meaningful error messages
+- Follow Go best practices
 
 ### Review Criteria
 
@@ -220,10 +220,10 @@ Yes! Submit a PR with improvements. We welcome:
 
 ## Resources
 
-- 📖 [DataSource SDK](https://github.com/locus-search/datasource-sdk) - Interface documentation
-- 🎨 [DataSource Template](https://github.com/locus-search/datasource-template) - Starter template
-- 💬 [Discussions](https://github.com/locus-search/locus/discussions) - Ask questions
-- 🐛 [Issues](https://github.com/locus-search/datasource-implementations/issues) - Report bugs
+- [DataSource SDK](https://github.com/locus-search/datasource-sdk) - Interface documentation
+- [DataSource Template](https://github.com/locus-search/datasource-template) - Starter template
+- [Discussions](https://github.com/locus-search/locus/discussions) - Ask questions
+- [Issues](https://github.com/locus-search/datasource-implementations/issues) - Report bugs
 
 ## License
 
@@ -237,4 +237,4 @@ Questions? Open an issue or discussion in the [main Locus repository](https://gi
 
 ---
 
-**Happy integrating!** 🚀
+**Happy integrating!**
