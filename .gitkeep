@@ -1,6 +1,5 @@
-# Placeholder directories for implementations
+# Official DataSource implementations for Locus Search. 
 # Each implementation will be added in its own directory
 
-# Expected structure:
-# wikipedia/
-# duckduckgo/
+duckduckgo/
+wikipedia/
