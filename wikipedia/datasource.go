@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"locus/models"
+	datasource "github.com/locus-search/datasource-sdk"
 )
 
 type DataSourceWikipedia struct {
@@ -52,7 +52,7 @@ func (es *DataSourceWikipedia) CheckAvailability() bool {
 
 // FetchTopics implements models.DataSource
 // Fetch Wikipedia search results for the query string. Each result is a topic with title and page ID.
-func (es *DataSourceWikipedia) FetchTopics(count int, input string) ([]models.DataSourceTopic, error) {
+func (es *DataSourceWikipedia) FetchTopics(count int, input string) ([]datasource.DataSourceTopic, error) {
 	query := strings.TrimSpace(input)
 	if query == "" {
 		return nil, errors.New("Missing search input for Wikipedia DataSource")
@@ -90,9 +90,9 @@ func (es *DataSourceWikipedia) FetchTopics(count int, input string) ([]models.Da
 		return nil, fmt.Errorf("wikipedia error: %s", response.Error.Info)
 	}
 
-	results := make([]models.DataSourceTopic, 0, len(response.Query.Search))
+	results := make([]datasource.DataSourceTopic, 0, len(response.Query.Search))
 	for _, item := range response.Query.Search {
-		results = append(results, models.DataSourceTopic{
+		results = append(results, datasource.DataSourceTopic{
 			Topic:   item.Title,
 			SourceURL:  fmt.Sprintf("https://en.wikipedia.org/?curid=%d", item.PageID),
 			TopicID: item.PageID,
@@ -104,7 +104,7 @@ func (es *DataSourceWikipedia) FetchTopics(count int, input string) ([]models.Da
 // FetchData implements models.DataSource
 // Fetch the extract (intro paragraph) for the given Wikipedia page ID
 // Returns a single DataSourceData item with the extract text and source URL
-func (es *DataSourceWikipedia) FetchData(count int, topicID int64) ([]models.DataSourceData, error) {
+func (es *DataSourceWikipedia) FetchData(count int, topicID int64) ([]datasource.DataSourceData, error) {
 	if topicID <= 0 {
 		return nil, errors.New("topicID is required")
 	}
@@ -143,17 +143,17 @@ func (es *DataSourceWikipedia) FetchData(count int, topicID int64) ([]models.Dat
 	for _, page := range response.Query.Pages {
 		dataText := strings.TrimSpace(page.Extract)
 		if dataText == "" {
-			return []models.DataSourceData{}, nil
+			return []datasource.DataSourceData{}, nil
 		}
-		data := models.DataSourceData{
+		data := datasource.DataSourceData{
 			DataText: dataText,
 			SourceURL:  fmt.Sprintf("https://en.wikipedia.org/?curid=%d", page.PageID),
 			AnswerID:   page.PageID,
 		}
-		return []models.DataSourceData{data}, nil
+		return []datasource.DataSourceData{data}, nil
 	}
 
-	return []models.DataSourceData{}, nil
+	return []datasource.DataSourceData{}, nil
 }
 
 // doJSON performs an HTTP GET request to the Wikipedia API with the specified parameters and decodes the JSON response into the target structure

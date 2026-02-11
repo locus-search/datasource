@@ -11,9 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"locus/models"
-
-	"github.com/PuerkitoBio/goquery"
+	datasource "github.com/locus-search/datasource-sdk"
+	goquery "github.com/PuerkitoBio/goquery"
 )
 
 const defaultQuestionCount = 5
@@ -69,7 +68,7 @@ func (es *DataSourceDuckDuckGo) CheckAvailability() bool {
 }
 
 // FetchTopics implements models.DataSource
-func (es *DataSourceDuckDuckGo) FetchTopics(count int, input string) ([]models.DataSourceTopic, error) {
+func (es *DataSourceDuckDuckGo) FetchTopics(count int, input string) ([]datasource.DataSourceTopic, error) {
 	query := strings.TrimSpace(input)
 	if query == "" {
 		return nil, errors.New("Missing Search Input for DuckDuckGo data source")
@@ -106,7 +105,7 @@ func (es *DataSourceDuckDuckGo) FetchTopics(count int, input string) ([]models.D
 		fmt.Printf("[duckduckgo] page title: %s\n", pageTitle)
 	}
 
-	results := make([]models.DataSourceTopic, 0, count)
+	results := make([]datasource.DataSourceTopic, 0, count)
 	seen := map[string]struct{}{}
 
 	// DuckDuckGo markup can vary, so keep the primary selector broad
@@ -131,7 +130,7 @@ func (es *DataSourceDuckDuckGo) FetchTopics(count int, input string) ([]models.D
 		}
 		seen[resolved] = struct{}{}
 
-		results = append(results, models.DataSourceTopic{
+		results = append(results, datasource.DataSourceTopic{
 			Topic:   normalizeWhitespace(title),
 			SourceURL:  resolved,
 			TopicID: urlToID(resolved),
@@ -156,8 +155,8 @@ func (es *DataSourceDuckDuckGo) FetchTopics(count int, input string) ([]models.D
 
 // FetchData implements models.DataSource. 
 // DuckDuckGo does not provide a way to fetch detailed data for a topic, so this is a no-op.
-func (es *DataSourceDuckDuckGo) FetchData(count int, topicID int64) ([]models.DataSourceData, error) {
-	return []models.DataSourceData{}, nil
+func (es *DataSourceDuckDuckGo) FetchData(count int, topicID int64) ([]datasource.DataSourceData, error) {
+	return []datasource.DataSourceData{}, nil
 }
 
 // buildSearchURL constructs the DuckDuckGo search URL with the given query and site filter if set.
@@ -182,7 +181,7 @@ func (es *DataSourceDuckDuckGo) buildQuery(query string) string {
 }
 
 // fallbackResultLinks performs a broad scan of all anchor tags in the document to find links matching the site filter.
-func (es *DataSourceDuckDuckGo) fallbackResultLinks(doc *goquery.Document, count int, seen map[string]struct{}) []models.DataSourceTopic {
+func (es *DataSourceDuckDuckGo) fallbackResultLinks(doc *goquery.Document, count int, seen map[string]struct{}) []datasource.DataSourceTopic {
 	targetHost := strings.TrimSpace(es.SiteFilter)
 	if targetHost == "" {
 		return nil
@@ -194,7 +193,7 @@ func (es *DataSourceDuckDuckGo) fallbackResultLinks(doc *goquery.Document, count
 		return nil
 	}
 
-	results := make([]models.DataSourceTopic, 0, count)
+	results := make([]datasource.DataSourceTopic, 0, count)
 	// Scan all anchors and keep only matches for the target host
 	doc.Find("a[href]").EachWithBreak(func(_ int, s *goquery.Selection) bool {
 		if len(results) >= count {
@@ -222,7 +221,7 @@ func (es *DataSourceDuckDuckGo) fallbackResultLinks(doc *goquery.Document, count
 		if title == "" {
 			title = resolved
 		}
-		results = append(results, models.DataSourceTopic{
+		results = append(results, datasource.DataSourceTopic{
 			Topic:   normalizeWhitespace(title),
 			SourceURL:  resolved,
 			TopicID: urlToID(resolved),
